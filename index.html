@@ -1,98 +1,201 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>KAMDRIDI</title>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     body {
       background: black;
       color: gold;
-      text-align: center;
       font-family: Arial;
-      padding-top: 100px;
+      text-align: center;
+      margin: 0;
+      padding: 40px;
     }
-    input {
-      display: block;
-      margin: 10px auto;
+
+    input, button {
       padding: 10px;
-      width: 250px;
-    }
-    button {
-      padding: 10px 20px;
       margin: 5px;
-      background: gold;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
+    }
+
+    h1 {
+      font-size: 40px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    audio {
+      margin-top: 10px;
+      width: 300px;
     }
   </style>
 </head>
+
 <body>
 
-  <h1>KAMDRIDI</h1>
-  <p>Echoes Become Sound</p>
+  <div id="auth">
+    <h1>KAMDRIDI</h1>
+    <p>Echoes Become Sound</p>
 
-  <div id="hero">
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Password" />
+    <input type="email" id="email" placeholder="Email"><br>
+    <input type="password" id="password" placeholder="Password"><br>
+
     <button onclick="createAccount()">Create Account</button>
     <button onclick="login()">Login</button>
   </div>
 
-  <div id="home" style="display:none;">
-    <h2>Welcome to the Vault</h2>
-    <p>You are inside.</p>
+  <div id="app" class="hidden">
+    <h1>Vault</h1>
+
+    <div id="uploadSection" class="hidden">
+      <h2>Upload Track</h2>
+      <input type="text" id="trackTitle" placeholder="Track Title"><br>
+      <input type="file" id="audioFile" accept="audio/*"><br>
+      <button onclick="uploadTrack()">Upload</button>
+      <hr>
+    </div>
+
+    <div id="tracks"></div>
+
+    <br>
+    <button onclick="logout()">Logout</button>
   </div>
 
 <script>
-  const supabaseUrl = "https://retoydsgsuvznlpsguts.supabase.co";
-  const supabaseKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldG95ZHNnc3V2em5scHNndXRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5Mjg0MzEsImV4cCI6MjA4NjUwNDQzMX0.2Ptgo4ivW6rlJV4HaVNWV3bBMpwAEYVGRu6YDjE8tMk
 
-  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseUrl = "https://retoydsgsuvznlpsguts.supabase.co";
+const supabaseKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldG95ZHNnc3V2em5scHNndXRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5Mjg0MzEsImV4cCI6MjA4NjUwNDQzMX0.2Ptgo4ivW6rlJV4HaVNWV3bBMpwAEYVGRu6YDjE8tMk
 
-  async function createAccount() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password
-    });
+async function createAccount() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-    if (error) {
-      alert(error.message);
-    } else {
-      alert("Check your email to confirm your account.");
-    }
-  }
-
-  async function login() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-
-    if (error) {
-      alert(error.message);
-    } else {
-      enterApp();
-    }
-  }
-
-  function enterApp() {
-    document.getElementById("hero").style.display = "none";
-    document.getElementById("home").style.display = "block";
-  }
-
-  window.addEventListener("load", async () => {
-    const { data } = await supabase.auth.getSession();
-    if (data.session) {
-      enterApp();
-    }
+  const { error } = await supabase.auth.signUp({
+    email,
+    password
   });
+
+  if (error) alert(error.message);
+  else alert("Check your email to confirm.");
+}
+
+async function login() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    alert(error.message);
+  } else {
+    enterApp();
+  }
+}
+
+async function logout() {
+  await supabase.auth.signOut();
+  location.reload();
+}
+
+async function enterApp() {
+  document.getElementById("auth").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+
+  checkAdmin();
+  loadTracks();
+}
+
+async function checkAdmin() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const { data } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (data && data.role === "admin") {
+    document.getElementById("uploadSection").classList.remove("hidden");
+  }
+}
+
+async function uploadTrack() {
+  const file = document.getElementById("audioFile").files[0];
+  const title = document.getElementById("trackTitle").value;
+
+  if (!file || !title) {
+    alert("Add title and file.");
+    return;
+  }
+
+  const filePath = Date.now() + "-" + file.name;
+
+  const { error: uploadError } = await supabase
+    .storage
+    .from("tracks")
+    .upload(filePath, file);
+
+  if (uploadError) {
+    alert(uploadError.message);
+    return;
+  }
+
+  const publicUrl = `${supabaseUrl}/storage/v1/object/public/tracks/${filePath}`;
+
+  const { error: dbError } = await supabase
+    .from("tracks")
+    .insert([
+      {
+        title: title,
+        audio_url: publicUrl,
+        is_early_access: false,
+        release_date: new Date()
+      }
+    ]);
+
+  if (dbError) alert(dbError.message);
+  else {
+    alert("Uploaded!");
+    loadTracks();
+  }
+}
+
+async function loadTracks() {
+  const { data } = await supabase
+    .from("tracks")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  const container = document.getElementById("tracks");
+  container.innerHTML = "";
+
+  data.forEach(track => {
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <h3>${track.title}</h3>
+      <audio controls src="${track.audio_url}"></audio>
+      <hr>
+    `;
+    container.appendChild(div);
+  });
+}
+
+window.addEventListener("load", async () => {
+  const { data } = await supabase.auth.getSession();
+  if (data.session) enterApp();
+});
+
 </script>
 
 </body>
