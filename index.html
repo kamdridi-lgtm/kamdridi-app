@@ -4,159 +4,76 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>KAMDRIDI</title>
-
 <meta name="theme-color" content="#000000" />
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Arial', sans-serif;
-}
+* { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
+body { background:#000; color:#d4af37; overflow-x:hidden; }
 
-body {
-  background: #000;
-  color: #d4af37;
-  overflow-x: hidden;
-}
-
-/* Animated Smoke Background */
 body::before {
-  content: "";
-  position: fixed;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  left: -50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255,215,0,0.05), transparent 40%),
-              radial-gradient(circle at 70% 70%, rgba(255,215,0,0.04), transparent 40%);
-  animation: smokeMove 15s linear infinite;
-  z-index: -1;
+  content:"";
+  position:fixed;
+  width:200%; height:200%;
+  top:-50%; left:-50%;
+  background:radial-gradient(circle at 30% 30%, rgba(255,215,0,0.05), transparent 40%),
+             radial-gradient(circle at 70% 70%, rgba(255,215,0,0.04), transparent 40%);
+  animation:smokeMove 15s linear infinite;
+  z-index:-1;
 }
+@keyframes smokeMove { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
 
-@keyframes smokeMove {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* HERO */
 .hero {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: radial-gradient(circle at center, #111 0%, #000 70%);
-  text-align: center;
-  animation: fadeIn 2s ease-in;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
 }
+.hero h1 { font-size:4rem; letter-spacing:8px; text-shadow:0 0 15px rgba(212,175,55,0.5); }
+.hero p { margin-top:20px; font-size:1.3rem; opacity:0.8; }
 
-.hero h1 {
-  font-size: 4rem;
-  letter-spacing: 8px;
-  text-shadow: 0 0 15px rgba(212,175,55,0.5);
+button {
+  margin-top:40px;
+  padding:14px 40px;
+  border:2px solid #d4af37;
+  background:transparent;
+  color:#d4af37;
+  cursor:pointer;
+  transition:0.3s;
 }
+button:hover { background:#d4af37; color:black; box-shadow:0 0 15px #d4af37; }
 
-.hero p {
-  margin-top: 20px;
-  font-size: 1.3rem;
-  opacity: 0.8;
-}
-
-.enter-btn {
-  margin-top: 60px;
-  padding: 15px 50px;
-  background: transparent;
-  border: 2px solid #d4af37;
-  color: #d4af37;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.enter-btn:hover {
-  background: #d4af37;
-  color: black;
-  box-shadow: 0 0 20px #d4af37;
-}
-
-/* NAV */
 .nav {
-  display: none;
-  background: #111;
-  padding: 20px;
-  text-align: center;
-  border-bottom: 1px solid #222;
+  display:none;
+  background:#111;
+  padding:20px;
+  text-align:center;
 }
+.nav button { margin:0 15px; }
 
-.nav button {
-  background: none;
-  border: none;
-  color: #d4af37;
-  margin: 0 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.nav button:hover {
-  text-shadow: 0 0 10px #d4af37;
-}
-
-/* SECTIONS */
 .section {
-  display: none;
-  padding: 100px 20px;
-  text-align: center;
-  animation: fadeIn 0.6s ease-in;
-}
-
-.section h2 {
-  margin-bottom: 40px;
-  font-size: 2rem;
-  letter-spacing: 3px;
+  display:none;
+  padding:80px 20px;
+  text-align:center;
 }
 
 .card {
-  border: 1px solid rgba(212,175,55,0.4);
-  padding: 30px;
-  margin: 30px auto;
-  max-width: 450px;
-  background: rgba(17,17,17,0.8);
-  backdrop-filter: blur(5px);
-  transition: 0.3s;
+  border:1px solid rgba(212,175,55,0.4);
+  padding:30px;
+  margin:30px auto;
+  max-width:450px;
+  background:rgba(17,17,17,0.8);
 }
 
-.card:hover {
-  box-shadow: 0 0 20px rgba(212,175,55,0.3);
-}
-
-input, button.subscribe-btn {
-  padding: 14px;
-  margin-top: 20px;
-  width: 80%;
-  max-width: 320px;
-  border: 1px solid #d4af37;
-  background: black;
-  color: #d4af37;
-}
-
-.subscribe-btn {
-  background: #d4af37;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.subscribe-btn:hover {
-  box-shadow: 0 0 15px #d4af37;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+input {
+  padding:12px;
+  width:80%;
+  max-width:300px;
+  margin-top:15px;
+  border:1px solid #d4af37;
+  background:black;
+  color:#d4af37;
 }
 </style>
 </head>
@@ -166,14 +83,14 @@ input, button.subscribe-btn {
 <div class="hero" id="hero">
   <h1>KAMDRIDI</h1>
   <p>Echoes Become Sound.</p>
-  <button class="enter-btn" onclick="enterApp()">ENTER</button>
+  <button onclick="enterApp()">ENTER</button>
 </div>
 
 <div class="nav" id="nav">
   <button onclick="showSection('home')">Home</button>
   <button onclick="showSection('vault')">Vault</button>
   <button onclick="showSection('collector')">Collector</button>
-  <button onclick="showSection('join')">Join</button>
+  <button onclick="showSection('account')">Account</button>
 </div>
 
 <div class="section" id="home">
@@ -188,9 +105,16 @@ input, button.subscribe-btn {
 
 <div class="section" id="vault">
   <h2>Music Vault</h2>
-  <div class="card">
+  <div class="card" id="lockedContent">
     <h3>Unreleased Track</h3>
-    <p>🔒 Early Access — Account Required</p>
+    <p>🔒 Locked — Create Account to Unlock</p>
+  </div>
+
+  <div class="card" id="unlockedContent" style="display:none;">
+    <h3>Unreleased Track — Early Access</h3>
+    <audio controls style="width:100%;">
+      <source src="#" type="audio/mpeg">
+    </audio>
   </div>
 </div>
 
@@ -202,10 +126,11 @@ input, button.subscribe-btn {
   </div>
 </div>
 
-<div class="section" id="join">
-  <h2>Join The Signal</h2>
-  <input type="email" placeholder="Enter your email" />
-  <button class="subscribe-btn">Join</button>
+<div class="section" id="account">
+  <h2>Create Account</h2>
+  <input type="text" id="username" placeholder="Enter Username" />
+  <br>
+  <button onclick="createAccount()">Create Account</button>
 </div>
 
 <script>
@@ -213,12 +138,34 @@ function enterApp() {
   document.getElementById('hero').style.display = "none";
   document.getElementById('nav').style.display = "block";
   showSection('home');
+  checkSession();
 }
 
-function showSection(sectionId) {
-  let sections = document.querySelectorAll('.section');
-  sections.forEach(sec => sec.style.display = "none");
-  document.getElementById(sectionId).style.display = "block";
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(sec => sec.style.display="none");
+  document.getElementById(id).style.display="block";
+}
+
+function createAccount() {
+  let username = document.getElementById('username').value;
+  if(username.length > 2) {
+    localStorage.setItem("kamdridiUser", username);
+    alert("Vault Unlocked.");
+    unlockVault();
+  } else {
+    alert("Username must be at least 3 characters.");
+  }
+}
+
+function checkSession() {
+  if(localStorage.getItem("kamdridiUser")) {
+    unlockVault();
+  }
+}
+
+function unlockVault() {
+  document.getElementById("lockedContent").style.display="none";
+  document.getElementById("unlockedContent").style.display="block";
 }
 </script>
 
