@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KAMDRIDI</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000" />
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #000;
+  color: #d4af37;
+  text-align: center;
+}
+
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, #111 0%, #000 100%);
+}
+
+h1 {
+  font-size: 3rem;
+  letter-spacing: 5px;
+}
+
+.tagline {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+button {
+  margin-top: 40px;
+  padding: 15px 40px;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  background: #d4af37;
+  color: black;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #b8962e;
+}
+
+.section {
+  padding: 80px 20px;
+}
+
+.card {
+  border: 1px solid #d4af37;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 400px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="hero">
+  <h1>KAMDRIDI</h1>
+  <div class="tagline">Echoes Become Sound.</div>
+  <button onclick="enterVault()">ENTER THE VAULT</button>
+</div>
+
+<div id="vault" class="section" style="display:none;">
+  <h2>Music Vault</h2>
+
+  <div class="card">
+    <h3>War Machines</h3>
+    <audio controls>
+      <source src="#" type="audio/mpeg">
+      Your browser does not support audio.
+    </audio>
+  </div>
+
+  <div class="card">
+    <h3>Unreleased Track (Early Access)</h3>
+    <p>Login required.</p>
+  </div>
+
+</div>
+
+<script>
+function enterVault() {
+  document.querySelector(".hero").style.display = "none";
+  document.getElementById("vault").style.display = "block";
+}
+</script>
+
+</body>
+</html>
