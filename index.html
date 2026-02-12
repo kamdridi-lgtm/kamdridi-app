@@ -21,6 +21,25 @@ body {
   overflow-x: hidden;
 }
 
+/* Animated Smoke Background */
+body::before {
+  content: "";
+  position: fixed;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,215,0,0.05), transparent 40%),
+              radial-gradient(circle at 70% 70%, rgba(255,215,0,0.04), transparent 40%);
+  animation: smokeMove 15s linear infinite;
+  z-index: -1;
+}
+
+@keyframes smokeMove {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* HERO */
 .hero {
   height: 100vh;
@@ -34,73 +53,93 @@ body {
 }
 
 .hero h1 {
-  font-size: 3.5rem;
-  letter-spacing: 6px;
+  font-size: 4rem;
+  letter-spacing: 8px;
+  text-shadow: 0 0 15px rgba(212,175,55,0.5);
 }
 
 .hero p {
-  margin-top: 15px;
-  font-size: 1.2rem;
+  margin-top: 20px;
+  font-size: 1.3rem;
   opacity: 0.8;
 }
 
 .enter-btn {
-  margin-top: 50px;
-  padding: 15px 45px;
-  background: #d4af37;
-  border: none;
-  color: black;
+  margin-top: 60px;
+  padding: 15px 50px;
+  background: transparent;
+  border: 2px solid #d4af37;
+  color: #d4af37;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
 }
 
 .enter-btn:hover {
-  background: #b8962e;
+  background: #d4af37;
+  color: black;
+  box-shadow: 0 0 20px #d4af37;
 }
 
 /* NAV */
 .nav {
   display: none;
   background: #111;
-  padding: 15px;
+  padding: 20px;
   text-align: center;
+  border-bottom: 1px solid #222;
 }
 
 .nav button {
   background: none;
   border: none;
   color: #d4af37;
-  margin: 0 15px;
+  margin: 0 20px;
   font-size: 1rem;
   cursor: pointer;
+  transition: 0.3s;
+}
+
+.nav button:hover {
+  text-shadow: 0 0 10px #d4af37;
 }
 
 /* SECTIONS */
 .section {
   display: none;
-  padding: 80px 20px;
+  padding: 100px 20px;
   text-align: center;
+  animation: fadeIn 0.6s ease-in;
 }
 
 .section h2 {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
+  font-size: 2rem;
+  letter-spacing: 3px;
 }
 
 .card {
-  border: 1px solid #d4af37;
-  padding: 20px;
-  margin: 20px auto;
-  max-width: 400px;
-  background: #111;
+  border: 1px solid rgba(212,175,55,0.4);
+  padding: 30px;
+  margin: 30px auto;
+  max-width: 450px;
+  background: rgba(17,17,17,0.8);
+  backdrop-filter: blur(5px);
+  transition: 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 0 20px rgba(212,175,55,0.3);
 }
 
 input, button.subscribe-btn {
-  padding: 12px;
-  margin-top: 15px;
+  padding: 14px;
+  margin-top: 20px;
   width: 80%;
-  max-width: 300px;
-  border: none;
+  max-width: 320px;
+  border: 1px solid #d4af37;
+  background: black;
+  color: #d4af37;
 }
 
 .subscribe-btn {
@@ -108,25 +147,28 @@ input, button.subscribe-btn {
   color: black;
   font-weight: bold;
   cursor: pointer;
+  transition: 0.3s;
+}
+
+.subscribe-btn:hover {
+  box-shadow: 0 0 15px #d4af37;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>
 </head>
 
 <body>
 
-<!-- HERO -->
 <div class="hero" id="hero">
   <h1>KAMDRIDI</h1>
   <p>Echoes Become Sound.</p>
   <button class="enter-btn" onclick="enterApp()">ENTER</button>
 </div>
 
-<!-- NAV -->
 <div class="nav" id="nav">
   <button onclick="showSection('home')">Home</button>
   <button onclick="showSection('vault')">Vault</button>
@@ -134,7 +176,6 @@ input, button.subscribe-btn {
   <button onclick="showSection('join')">Join</button>
 </div>
 
-<!-- HOME -->
 <div class="section" id="home">
   <h2>Echoes Unearthed</h2>
   <div class="card">
@@ -145,7 +186,6 @@ input, button.subscribe-btn {
   </div>
 </div>
 
-<!-- VAULT -->
 <div class="section" id="vault">
   <h2>Music Vault</h2>
   <div class="card">
@@ -154,7 +194,6 @@ input, button.subscribe-btn {
   </div>
 </div>
 
-<!-- COLLECTOR -->
 <div class="section" id="collector">
   <h2>Collector Chamber</h2>
   <div class="card">
@@ -163,7 +202,6 @@ input, button.subscribe-btn {
   </div>
 </div>
 
-<!-- JOIN -->
 <div class="section" id="join">
   <h2>Join The Signal</h2>
   <input type="email" placeholder="Enter your email" />
