@@ -1,120 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>KAMDRIDI App</title>
-
+  <title>KAMDRIDI</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
     body {
       background: black;
       color: gold;
-      font-family: Arial;
       text-align: center;
+      font-family: Arial;
       padding-top: 100px;
     }
-
     input {
+      display: block;
+      margin: 10px auto;
       padding: 10px;
-      margin: 5px;
       width: 250px;
     }
-
     button {
       padding: 10px 20px;
+      margin: 5px;
       background: gold;
       border: none;
       cursor: pointer;
-    }
-
-    #nav, #home {
-      display: none;
+      font-weight: bold;
     }
   </style>
 </head>
-
 <body>
 
+  <h1>KAMDRIDI</h1>
+  <p>Echoes Become Sound</p>
+
   <div id="hero">
-    <h1>KAMDRIDI</h1>
-    <p>Echoes Become Sound</p>
-
-    <input id="email" type="email" placeholder="Email"><br>
-    <input id="password" type="password" placeholder="Password"><br>
-
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
     <button onclick="createAccount()">Create Account</button>
     <button onclick="login()">Login</button>
   </div>
 
-  <div id="nav">
+  <div id="home" style="display:none;">
     <h2>Welcome to the Vault</h2>
-  </div>
-
-  <div id="home">
     <p>You are inside.</p>
   </div>
 
 <script>
   const supabaseUrl = "https://retoydsgsuvznlpsguts.supabase.co";
-  const supabaseKey = <!DOCTYPE html>
-<html>
-<head>
-  <title>KAMDRIDI App</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    body {
-      background: black;
-      color: gold;
-      font-family: Arial;
-      text-align: center;
-      padding-top: 100px;
-    }
-
-    input {
-      padding: 10px;
-      margin: 5px;
-      width: 250px;
-    }
-
-    button {
-      padding: 10px 20px;
-      background: gold;
-      border: none;
-      cursor: pointer;
-    }
-
-    #nav, #home {
-      display: none;
-    }
-  </style>
-</head>
-
-<body>
-
-  <div id="hero">
-    <h1>KAMDRIDI</h1>
-    <p>Echoes Become Sound</p>
-
-    <input id="email" type="email" placeholder="Email"><br>
-    <input id="password" type="password" placeholder="Password"><br>
-
-    <button onclick="createAccount()">Create Account</button>
-    <button onclick="login()">Login</button>
-  </div>
-
-  <div id="nav">
-    <h2>Welcome to the Vault</h2>
-  </div>
-
-  <div id="home">
-    <p>You are inside.</p>
-  </div>
-
-<script>
-  const supabaseUrl = "https://retoydsgsuvznlpsguts.supabase.co";
-  const supabaseKey = "PASTE_YOUR_ANON_KEY_HERE";
+  const supabaseKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldG95ZHNnc3V2em5scHNndXRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5Mjg0MzEsImV4cCI6MjA4NjUwNDQzMX0.2Ptgo4ivW6rlJV4HaVNWV3bBMpwAEYVGRu6YDjE8tMk
 
   const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
@@ -152,59 +84,6 @@
 
   function enterApp() {
     document.getElementById("hero").style.display = "none";
-    document.getElementById("nav").style.display = "block";
-    document.getElementById("home").style.display = "block";
-  }
-
-  window.addEventListener("load", async () => {
-    const { data } = await supabase.auth.getSession();
-    if (data.session) {
-      enterApp();
-    }
-  });
-</script>
-
-</body>
-</html>
-
-
-  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-  async function createAccount() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    const { error } = await supabase.auth.signUp({
-      email,
-      password
-    });
-
-    if (error) {
-      alert(error.message);
-    } else {
-      alert("Check your email to confirm your account.");
-    }
-  }
-
-  async function login() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-
-    if (error) {
-      alert(error.message);
-    } else {
-      enterApp();
-    }
-  }
-
-  function enterApp() {
-    document.getElementById("hero").style.display = "none";
-    document.getElementById("nav").style.display = "block";
     document.getElementById("home").style.display = "block";
   }
 
