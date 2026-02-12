@@ -5,56 +5,86 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>KAMDRIDI</title>
 
-<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#000000" />
 
 <style>
-body {
+* {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #000;
-  color: #d4af37;
-  text-align: center;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
 }
 
+body {
+  background: #000;
+  color: #d4af37;
+  overflow-x: hidden;
+}
+
+/* HERO */
 .hero {
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(circle at center, #111 0%, #000 100%);
+  background: radial-gradient(circle at center, #111 0%, #000 70%);
+  text-align: center;
+  animation: fadeIn 2s ease-in;
 }
 
-h1 {
-  font-size: 3rem;
-  letter-spacing: 5px;
+.hero h1 {
+  font-size: 3.5rem;
+  letter-spacing: 6px;
 }
 
-.tagline {
-  margin-top: 10px;
+.hero p {
+  margin-top: 15px;
   font-size: 1.2rem;
   opacity: 0.8;
 }
 
-button {
-  margin-top: 40px;
-  padding: 15px 40px;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
+.enter-btn {
+  margin-top: 50px;
+  padding: 15px 45px;
   background: #d4af37;
+  border: none;
   color: black;
   font-weight: bold;
+  cursor: pointer;
   transition: 0.3s;
 }
 
-button:hover {
+.enter-btn:hover {
   background: #b8962e;
 }
 
+/* NAV */
+.nav {
+  display: none;
+  background: #111;
+  padding: 15px;
+  text-align: center;
+}
+
+.nav button {
+  background: none;
+  border: none;
+  color: #d4af37;
+  margin: 0 15px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* SECTIONS */
 .section {
+  display: none;
   padding: 80px 20px;
+  text-align: center;
+}
+
+.section h2 {
+  margin-bottom: 30px;
 }
 
 .card {
@@ -62,40 +92,95 @@ button:hover {
   padding: 20px;
   margin: 20px auto;
   max-width: 400px;
+  background: #111;
+}
+
+input, button.subscribe-btn {
+  padding: 12px;
+  margin-top: 15px;
+  width: 80%;
+  max-width: 300px;
+  border: none;
+}
+
+.subscribe-btn {
+  background: #d4af37;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="hero">
+<!-- HERO -->
+<div class="hero" id="hero">
   <h1>KAMDRIDI</h1>
-  <div class="tagline">Echoes Become Sound.</div>
-  <button onclick="enterVault()">ENTER THE VAULT</button>
+  <p>Echoes Become Sound.</p>
+  <button class="enter-btn" onclick="enterApp()">ENTER</button>
 </div>
 
-<div id="vault" class="section" style="display:none;">
-  <h2>Music Vault</h2>
+<!-- NAV -->
+<div class="nav" id="nav">
+  <button onclick="showSection('home')">Home</button>
+  <button onclick="showSection('vault')">Vault</button>
+  <button onclick="showSection('collector')">Collector</button>
+  <button onclick="showSection('join')">Join</button>
+</div>
 
+<!-- HOME -->
+<div class="section" id="home">
+  <h2>Echoes Unearthed</h2>
   <div class="card">
     <h3>War Machines</h3>
-    <audio controls>
+    <audio controls style="width:100%;">
       <source src="#" type="audio/mpeg">
-      Your browser does not support audio.
     </audio>
   </div>
+</div>
 
+<!-- VAULT -->
+<div class="section" id="vault">
+  <h2>Music Vault</h2>
   <div class="card">
-    <h3>Unreleased Track (Early Access)</h3>
-    <p>Login required.</p>
+    <h3>Unreleased Track</h3>
+    <p>🔒 Early Access — Account Required</p>
   </div>
+</div>
 
+<!-- COLLECTOR -->
+<div class="section" id="collector">
+  <h2>Collector Chamber</h2>
+  <div class="card">
+    <h3>Echoes Unearthed Artifact</h3>
+    <p>$125 Limited Edition</p>
+  </div>
+</div>
+
+<!-- JOIN -->
+<div class="section" id="join">
+  <h2>Join The Signal</h2>
+  <input type="email" placeholder="Enter your email" />
+  <button class="subscribe-btn">Join</button>
 </div>
 
 <script>
-function enterVault() {
-  document.querySelector(".hero").style.display = "none";
-  document.getElementById("vault").style.display = "block";
+function enterApp() {
+  document.getElementById('hero').style.display = "none";
+  document.getElementById('nav').style.display = "block";
+  showSection('home');
+}
+
+function showSection(sectionId) {
+  let sections = document.querySelectorAll('.section');
+  sections.forEach(sec => sec.style.display = "none");
+  document.getElementById(sectionId).style.display = "block";
 }
 </script>
 
