@@ -1,173 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>KAMDRIDI</title>
-<meta name="theme-color" content="#000000" />
-
-<style>
-* { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
-body { background:#000; color:#d4af37; overflow-x:hidden; }
-
-body::before {
-  content:"";
-  position:fixed;
-  width:200%; height:200%;
-  top:-50%; left:-50%;
-  background:radial-gradient(circle at 30% 30%, rgba(255,215,0,0.05), transparent 40%),
-             radial-gradient(circle at 70% 70%, rgba(255,215,0,0.04), transparent 40%);
-  animation:smokeMove 15s linear infinite;
-  z-index:-1;
-}
-@keyframes smokeMove { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
-
-.hero {
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-}
-.hero h1 { font-size:4rem; letter-spacing:8px; text-shadow:0 0 15px rgba(212,175,55,0.5); }
-.hero p { margin-top:20px; font-size:1.3rem; opacity:0.8; }
-
-button {
-  margin-top:40px;
-  padding:14px 40px;
-  border:2px solid #d4af37;
-  background:transparent;
-  color:#d4af37;
-  cursor:pointer;
-  transition:0.3s;
-}
-button:hover { background:#d4af37; color:black; box-shadow:0 0 15px #d4af37; }
-
-.nav {
-  display:none;
-  background:#111;
-  padding:20px;
-  text-align:center;
-}
-.nav button { margin:0 15px; }
-
-.section {
-  display:none;
-  padding:80px 20px;
-  text-align:center;
-}
-
-.card {
-  border:1px solid rgba(212,175,55,0.4);
-  padding:30px;
-  margin:30px auto;
-  max-width:450px;
-  background:rgba(17,17,17,0.8);
-}
-
-input {
-  padding:12px;
-  width:80%;
-  max-width:300px;
-  margin-top:15px;
-  border:1px solid #d4af37;
-  background:black;
-  color:#d4af37;
-}
-</style>
-</head>
-
-<body>
-
-<div class="hero" id="hero">
-  <h1>KAMDRIDI</h1>
-  <p>Echoes Become Sound.</p>
-  <button onclick="enterApp()">ENTER</button>
-</div>
-
-<div class="nav" id="nav">
-  <button onclick="showSection('home')">Home</button>
-  <button onclick="showSection('vault')">Vault</button>
-  <button onclick="showSection('collector')">Collector</button>
-  <button onclick="showSection('account')">Account</button>
-</div>
-
-<div class="section" id="home">
-  <h2>Echoes Unearthed</h2>
-  <div class="card">
-    <h3>War Machines</h3>
-    <audio controls style="width:100%;">
-      <source src="#" type="audio/mpeg">
-    </audio>
-  </div>
-</div>
-
-<div class="section" id="vault">
-  <h2>Music Vault</h2>
-  <div class="card" id="lockedContent">
-    <h3>Unreleased Track</h3>
-    <p>🔒 Locked — Create Account to Unlock</p>
-  </div>
-
-  <div class="card" id="unlockedContent" style="display:none;">
-    <h3>Unreleased Track — Early Access</h3>
-    <audio controls style="width:100%;">
-      <source src="#" type="audio/mpeg">
-    </audio>
-  </div>
-</div>
-
-<div class="section" id="collector">
-  <h2>Collector Chamber</h2>
-  <div class="card">
-    <h3>Echoes Unearthed Artifact</h3>
-    <p>$125 Limited Edition</p>
-  </div>
-</div>
-
-<div class="section" id="account">
-  <h2>Create Account</h2>
-  <input type="text" id="username" placeholder="Enter Username" />
-  <br>
-  <button onclick="createAccount()">Create Account</button>
-</div>
-
 <script>
-function enterApp() {
-  document.getElementById('hero').style.display = "none";
-  document.getElementById('nav').style.display = "block";
-  showSection('home');
-  checkSession();
-}
+  const supabaseUrl = "https://retoydsgsuvznlpsguts.supabase.co";
+  const supabaseKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldG95ZHNnc3V2em5scHNndXRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5Mjg0MzEsImV4cCI6MjA4NjUwNDQzMX0.2Ptgo4ivW6rlJV4HaVNWV3bBMpwAEYVGRu6YDjE8tMk
 
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(sec => sec.style.display="none");
-  document.getElementById(id).style.display="block";
-}
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-function createAccount() {
-  let username = document.getElementById('username').value;
-  if(username.length > 2) {
-    localStorage.setItem("kamdridiUser", username);
-    alert("Vault Unlocked.");
-    unlockVault();
-  } else {
-    alert("Username must be at least 3 characters.");
+  async function createAccount() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password
+    });
+
+    if (error) {
+      alert(error.message);
+    } else {
+      alert("Check your email to confirm your account.");
+    }
   }
-}
 
-function checkSession() {
-  if(localStorage.getItem("kamdridiUser")) {
-    unlockVault();
+  async function login() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      alert(error.message);
+    } else {
+      enterApp();
+    }
   }
-}
 
-function unlockVault() {
-  document.getElementById("lockedContent").style.display="none";
-  document.getElementById("unlockedContent").style.display="block";
-}
+  function enterApp() {
+    document.getElementById("hero").style.display = "none";
+    document.getElementById("nav").style.display = "block";
+    document.getElementById("home").style.display = "block";
+  }
+
+  window.addEventListener("load", async () => {
+    const { data } = await supabase.auth.getSession();
+    if (data.session) {
+      enterApp();
+    }
+  });
 </script>
-
-</body>
-</html>
