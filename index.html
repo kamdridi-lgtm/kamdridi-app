@@ -1,73 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
   <title>KAMDRIDI</title>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     body {
       background: black;
-      color: gold;
+      color: #FFD700;
       font-family: Arial;
       text-align: center;
-      margin: 0;
-      padding: 40px;
+      margin-top: 100px;
     }
 
-    input, button {
+    input {
       padding: 10px;
       margin: 5px;
+      width: 250px;
     }
 
-    h1 {
-      font-size: 40px;
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      background: #FFD700;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
     }
 
-    .hidden {
+    #adminPanel {
       display: none;
-    }
-
-    audio {
-      margin-top: 10px;
-      width: 300px;
+      margin-top: 40px;
     }
   </style>
 </head>
 
 <body>
 
-  <div id="auth">
-    <h1>KAMDRIDI</h1>
-    <p>Echoes Become Sound</p>
+  <h1>KAMDRIDI</h1>
+  <p>Echoes Become Sound</p>
 
+  <div id="auth">
     <input type="email" id="email" placeholder="Email"><br>
     <input type="password" id="password" placeholder="Password"><br>
-
     <button onclick="createAccount()">Create Account</button>
     <button onclick="login()">Login</button>
   </div>
 
-  <div id="app" class="hidden">
-    <h1>Vault</h1>
-
-    <div id="uploadSection" class="hidden">
-      <h2>Upload Track</h2>
-      <input type="text" id="trackTitle" placeholder="Track Title"><br>
-      <input type="file" id="audioFile" accept="audio/*"><br>
-      <button onclick="uploadTrack()">Upload</button>
-      <hr>
-    </div>
-
-    <div id="tracks"></div>
-
-    <br>
-    <button onclick="logout()">Logout</button>
+  <div id="adminPanel">
+    <h2>Upload Track</h2>
+    <input type="text" id="trackTitle" placeholder="Track Title"><br>
+    <input type="file" id="audioFile" accept="audio/*"><br>
+    <button onclick="uploadTrack()">Upload</button>
   </div>
 
 <script>
-
 const supabaseUrl = "https://retoydsgsuvznlpsguts.supabase.co";
 const supabaseKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldG95ZHNnc3V2em5scHNndXRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5Mjg0MzEsImV4cCI6MjA4NjUwNDQzMX0.2Ptgo4ivW6rlJV4HaVNWV3bBMpwAEYVGRu6YDjE8tMk
 
@@ -82,15 +69,18 @@ async function createAccount() {
     password
   });
 
-  if (error) alert(error.message);
-  else alert("Check your email to confirm.");
+  if (error) {
+    alert(error.message);
+  } else {
+    alert("Check your email to confirm your account.");
+  }
 }
 
 async function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password
   });
@@ -98,35 +88,8 @@ async function login() {
   if (error) {
     alert(error.message);
   } else {
-    enterApp();
-  }
-}
-
-async function logout() {
-  await supabase.auth.signOut();
-  location.reload();
-}
-
-async function enterApp() {
-  document.getElementById("auth").classList.add("hidden");
-  document.getElementById("app").classList.remove("hidden");
-
-  checkAdmin();
-  loadTracks();
-}
-
-async function checkAdmin() {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return;
-
-  const { data } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (data && data.role === "admin") {
-    document.getElementById("uploadSection").classList.remove("hidden");
+    document.getElementById("adminPanel").style.display = "block";
+    alert("Login successful.");
   }
 }
 
@@ -151,7 +114,7 @@ async function uploadTrack() {
     return;
   }
 
-  const publicUrl = `${supabaseUrl}/storage/v1/object/public/tracks/${filePath}`;
+  const publicUrl = `https://retoydsgsuvznlpsguts.supabase.co/storage/v1/object/public/tracks/${filePath}`;
 
   const { error: dbError } = await supabase
     .from("tracks")
@@ -164,38 +127,12 @@ async function uploadTrack() {
       }
     ]);
 
-  if (dbError) alert(dbError.message);
-  else {
-    alert("Uploaded!");
-    loadTracks();
+  if (dbError) {
+    alert(dbError.message);
+  } else {
+    alert("Track uploaded successfully.");
   }
 }
-
-async function loadTracks() {
-  const { data } = await supabase
-    .from("tracks")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  const container = document.getElementById("tracks");
-  container.innerHTML = "";
-
-  data.forEach(track => {
-    const div = document.createElement("div");
-    div.innerHTML = `
-      <h3>${track.title}</h3>
-      <audio controls src="${track.audio_url}"></audio>
-      <hr>
-    `;
-    container.appendChild(div);
-  });
-}
-
-window.addEventListener("load", async () => {
-  const { data } = await supabase.auth.getSession();
-  if (data.session) enterApp();
-});
-
 </script>
 
 </body>
