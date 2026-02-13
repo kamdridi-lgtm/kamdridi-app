@@ -1,128 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>KAMDRIDI</title>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
     body {
-      margin: 0;
       background: black;
-      color: #FFD700;
-      font-family: Arial, sans-serif;
+      color: gold;
+      font-family: Arial;
       text-align: center;
+      padding-top: 100px;
     }
-
-    h1 {
-      margin-top: 100px;
-      font-size: 40px;
-    }
-
-    .box {
-      margin-top: 20px;
-    }
-
     input {
       display: block;
       margin: 10px auto;
       padding: 10px;
       width: 250px;
     }
-
     button {
       padding: 10px 20px;
       margin: 5px;
-      background: #FFD700;
+      background: gold;
       border: none;
       cursor: pointer;
-      font-weight: bold;
-    }
-
-    #app {
-      display: none;
-      margin-top: 50px;
     }
   </style>
 </head>
-
 <body>
 
-  <div id="login">
-    <h1>KAMDRIDI</h1>
-    <p>Echoes Become Sound</p>
+<h1>KAMDRIDI</h1>
+<p>Echoes Become Sound</p>
 
-    <div class="box">
-      <input id="email" type="email" placeholder="Email" />
-      <input id="password" type="password" placeholder="Password" />
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="password" placeholder="Password">
 
-      <button onclick="createAccount()">Create Account</button>
-      <button onclick="login()">Login</button>
-    </div>
-  </div>
+<button id="signupBtn">Create Account</button>
+<button id="loginBtn">Login</button>
 
-  <div id="app">
-    <h1>Welcome to KAMDRIDI</h1>
-    <button onclick="logout()">Logout</button>
-  </div>
+<script>
+const supabaseUrl = "https://retoydsgsuvznlpsguts.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldG95ZHNnc3V2em5scHNndXRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5Mjg0MzEsImV4cCI6MjA4NjUwNDQzMX0.2Ptgo4ivW6rlJV4HaVNWV3bBMpwAEYVGRu6YDjE8tMk
 
-  <script>
-    const supabaseUrl = "https://retoydsgsuvznlpsguts.supabase.co";
-    const supabaseKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldG95ZHNnc3V2em5scHNndXRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5Mjg0MzEsImV4cCI6MjA4NjUwNDQzMX0.2Ptgo4ivW6rlJV4HaVNWV3bBMpwAEYVGRu6YDjE8tMk
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+document.getElementById("signupBtn").addEventListener("click", async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-    async function createAccount() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+  const { error } = await supabase.auth.signUp({
+    email,
+    password
+  });
 
-      const { error } = await supabase.auth.signUp({
-        email: email,
-        password: password
-      });
+  if (error) {
+    alert(error.message);
+  } else {
+    alert("Check your email to confirm your account.");
+  }
+});
 
-      if (error) {
-        alert(error.message);
-      } else {
-        alert("Check your email to confirm your account.");
-      }
-    }
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-    async function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
 
-      const { error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
-
-      if (error) {
-        alert(error.message);
-      } else {
-        showApp();
-      }
-    }
-
-    async function logout() {
-      await supabase.auth.signOut();
-      document.getElementById("login").style.display = "block";
-      document.getElementById("app").style.display = "none";
-    }
-
-    function showApp() {
-      document.getElementById("login").style.display = "none";
-      document.getElementById("app").style.display = "block";
-    }
-
-    window.addEventListener("load", async () => {
-      const { data } = await supabase.auth.getSession();
-      if (data.session) {
-        showApp();
-      }
-    });
-  </script>
+  if (error) {
+    alert(error.message);
+  } else {
+    alert("Login successful.");
+  }
+});
+</script>
 
 </body>
 </html>
