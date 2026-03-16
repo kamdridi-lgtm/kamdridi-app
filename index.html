@@ -1,106 +1,406 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>KAMDRIDI</title>
-
-  <!-- Supabase CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KAMDRIDI | Echoes Unearthed</title>
+  <meta name="description" content="Enter the Echoes Unearthed universe: cinematic heavy music, visuals, services, and collector artifacts." />
   <style>
+    :root {
+      --bg: #080808;
+      --panel: #151515;
+      --gold: #d8ad53;
+      --gold-bright: #f2ce78;
+      --text: #f6f6f6;
+      --muted: #b8b8b8;
+      --border: #2b2b2b;
+      --radius: 14px;
+      --shadow: 0 18px 44px rgba(0, 0, 0, 0.38);
+      --max-width: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
     body {
-      background: black;
-      color: gold;
-      font-family: Arial, sans-serif;
+      margin: 0;
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        linear-gradient(130deg, rgba(216, 173, 83, 0.09), transparent 35%),
+        radial-gradient(circle at top, #181818 0%, var(--bg) 60%);
+      line-height: 1.6;
+    }
+
+    .texture-overlay::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.06;
+      background-image: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=60');
+      background-size: cover;
+      mix-blend-mode: luminosity;
+      z-index: -1;
+    }
+
+    .intro-veil {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(26,26,26,0.9), #050505 80%);
+      z-index: 30;
+      opacity: 1;
+      transition: opacity 1.2s ease;
+      pointer-events: all;
+    }
+
+    body.intro-ready .intro-veil {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .container { width: min(var(--max-width), 92%); margin: 0 auto; }
+
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+      background: rgba(8, 8, 8, 0.78);
+      border-bottom: 1px solid #222;
+    }
+
+    .site-nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px 0;
+    }
+
+    .brand { font-weight: 900; color: var(--gold); letter-spacing: 0.12em; }
+    .nav-links { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.92rem; }
+    .nav-links a { color: var(--muted); text-decoration: none; transition: color 0.2s ease; }
+    .nav-links a:hover { color: var(--gold-bright); }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+      background: #090909;
+      isolation: isolate;
+    }
+
+    .hero video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.42;
+      transform: scale(1.06);
+      animation: slowZoom 26s ease-in-out infinite alternate;
+      filter: contrast(1.02) saturate(0.8) brightness(0.62);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(8,8,8,0.15), rgba(8,8,8,0.9));
+      z-index: 0;
+    }
+
+    .particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background-image: radial-gradient(circle at 20% 30%, rgba(242,206,120,0.22) 1px, transparent 2px), radial-gradient(circle at 72% 16%, rgba(255,255,255,0.15) 1px, transparent 2px), radial-gradient(circle at 50% 74%, rgba(242,206,120,0.14) 1px, transparent 2px);
+      background-size: 220px 220px, 260px 260px, 180px 180px;
+      animation: drift 16s linear infinite;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
       text-align: center;
-      padding-top: 100px;
+      padding: 80px 18px;
+      max-width: 900px;
+      animation: riseIn 1.35s ease;
     }
 
-    input {
-      display: block;
-      margin: 10px auto;
-      padding: 10px;
-      width: 250px;
-      font-size: 16px;
+    .hero h1 { margin: 0; font-size: clamp(2.8rem, 10vw, 6.4rem); letter-spacing: 0.11em; color: var(--gold-bright); text-shadow: 0 10px 34px rgba(0,0,0,0.6); }
+    .hero .tagline { margin: 12px 0 0; font-size: clamp(1.2rem, 3.2vw, 1.9rem); font-weight: 700; letter-spacing: 0.08em; }
+    .hero p { margin: 16px auto 0; max-width: 720px; color: #e3e3e3; }
+
+    .hero-actions { margin-top: 24px; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background: var(--gold);
+      color: #111;
+      border-radius: 999px;
+      padding: 12px 24px;
+      font-weight: 800;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 10px 30px rgba(216,173,83,0.24);
     }
 
-    button {
-      padding: 10px 20px;
-      margin: 5px;
-      background: gold;
-      border: none;
+    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(216,173,83,0.35); }
+
+    .sound-toggle {
+      border: 1px solid #6e5224;
+      background: rgba(5,5,5,0.6);
+      color: var(--gold-bright);
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 700;
       cursor: pointer;
-      font-weight: bold;
-      font-size: 14px;
     }
 
-    button:hover {
-      background: orange;
+    .scroll-hint { margin-top: 24px; font-size: 0.88rem; color: #d0d0d0; letter-spacing: 0.08em; }
+
+    section { padding: 72px 0; border-bottom: 1px solid #1d1d1d; }
+    h2 { margin: 0 0 18px; color: var(--gold-bright); font-size: clamp(1.7rem, 3vw, 2.5rem); letter-spacing: 0.04em; }
+    h3 { margin-top: 0; }
+    .lead { max-width: 860px; color: var(--muted); margin-bottom: 26px; }
+
+    .album-section { background: linear-gradient(180deg, rgba(242,206,120,0.03), transparent 22%); }
+    .album-wrap { display: grid; grid-template-columns: minmax(240px, 340px) 1fr; gap: 24px; align-items: start; }
+
+    .panel {
+      background: linear-gradient(180deg, #191919, var(--panel));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel .content { padding: 18px; }
+    .album-art { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+    .tracklist { margin: 0; padding-left: 18px; color: var(--muted); }
+    .tracklist li { margin-bottom: 9px; }
+    .audio-list { display: grid; gap: 14px; }
+    .audio-list audio { width: 100%; }
+
+    .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .gallery-item img { width: 100%; height: 240px; object-fit: cover; display: block; filter: saturate(0.75) contrast(1.06); transition: transform 0.35s ease, filter 0.35s ease; }
+    .gallery-item:hover img { transform: scale(1.03); filter: saturate(1) contrast(1.1); }
+
+    .video-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .video-card iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; display: block; }
+
+    .studio-grid, .pricing-grid, .store-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .studio-card, .price-card, .store-card {
+      transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+    }
+
+    .studio-card:hover, .price-card:hover, .store-card:hover {
+      transform: translateY(-6px);
+      border-color: #695026;
+      box-shadow: 0 22px 40px rgba(0,0,0,0.45);
+    }
+
+    .store-card img { width: 100%; height: 220px; object-fit: cover; display: block; transition: transform 0.3s ease; }
+    .store-card:hover img { transform: scale(1.04); }
+
+    .price { font-size: 2.1rem; font-weight: 900; color: var(--gold-bright); margin: 8px 0; }
+    .meta { color: var(--muted); font-size: 0.95rem; }
+
+    .btn {
+      margin-top: 14px;
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      background: linear-gradient(90deg, #be9238, #f2ce78);
+      color: #111;
+    }
+
+    .btn.secondary {
+      background: transparent;
+      color: var(--gold-bright);
+      border: 1px solid #755722;
+    }
+
+    .btn:disabled { opacity: 0.65; cursor: not-allowed; }
+
+    .status-banner { margin-top: 20px; padding: 11px 14px; border-radius: 10px; font-weight: 700; display: none; }
+    .status-banner.error { display: block; border: 1px solid #7d3f3f; background: #281717; color: #f5a9a9; }
+    .status-banner.success { display: block; border: 1px solid #2f6b42; background: #16241c; color: #9ce5b5; }
+
+    .fade-up { opacity: 0; transform: translateY(16px); transition: opacity .75s ease, transform .75s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    footer { text-align: center; color: #a2a2a2; padding: 28px 0 44px; font-size: 0.92rem; }
+
+    @keyframes riseIn { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes drift { from { transform: translateY(0); } to { transform: translateY(-18px); } }
+    @keyframes slowZoom { from { transform: scale(1.04); } to { transform: scale(1.12); } }
+
+    @media (max-width: 860px) {
+      .album-wrap { grid-template-columns: 1fr; }
+      .site-nav .container { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
+<body class="texture-overlay">
+  <div class="intro-veil" aria-hidden="true"></div>
 
-<body>
+  <nav class="site-nav">
+    <div class="container">
+      <strong class="brand">KAMDRIDI</strong>
+      <div class="nav-links">
+        <a href="#album">Album</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#studio">Studio</a>
+        <a href="#videos">Videos</a>
+        <a href="#services">Services</a>
+        <a href="#store">Store</a>
+      </div>
+    </div>
+  </nav>
 
-<h1>KAMDRIDI</h1>
-<p>Echoes Become Sound</p>
+  <header class="hero">
+    <video id="heroVideo" autoplay muted loop playsinline poster="https://placehold.co/1600x900/111111/d8ad53?text=Echoes+Unearthed">
+      <source src="https://cdn.coverr.co/videos/coverr-dark-clouds-above-the-mountains-6370/1080p.mp4" type="video/mp4" />
+    </video>
+    <audio id="heroAmbience" loop preload="none">
+      <source src="https://cdn.pixabay.com/download/audio/2022/11/03/audio_c9f5284cb2.mp3?filename=dark-ambient-atmosphere-125677.mp3" type="audio/mpeg" />
+    </audio>
+    <div class="particles" aria-hidden="true"></div>
+    <div class="hero-content container">
+      <h1>KAMDRIDI</h1>
+      <p class="tagline">Heavy. Cinematic. Intentional.</p>
+      <p>Step through the gate into Echoes Unearthed — an industrial, atmospheric universe crafted in sound and image.</p>
+      <div class="hero-actions">
+        <a class="hero-cta" href="#album">Enter the Echoes Ecosystem</a>
+        <button id="soundToggle" class="sound-toggle" type="button" aria-pressed="false">Enable Atmosphere Sound</button>
+      </div>
+      <div class="scroll-hint">SCROLL TO DESCEND</div>
+      <p id="statusBanner" class="status-banner" role="status" aria-live="polite"></p>
+    </div>
+  </header>
 
-<input type="email" id="email" placeholder="Email">
-<input type="password" id="password" placeholder="Password">
+  <main>
+    <section id="album" class="fade-up album-section">
+      <div class="container">
+        <h2>Echoes Unearthed — Album Experience</h2>
+        <p class="lead">A cinematic album journey shaped like a descent into forgotten machinery. Every track is connected by one continuous lore arc.</p>
+        <div class="album-wrap">
+          <article class="panel">
+            <img class="album-art" src="https://images.unsplash.com/photo-1511735643442-503bb3bd348a?auto=format&fit=crop&w=900&q=80" alt="Echoes Unearthed album artwork placeholder" loading="lazy" />
+            <div class="content">
+              <h3>Track List</h3>
+              <ol class="tracklist">
+                <li>Iron Testament</li>
+                <li>Ash Choir</li>
+                <li>Vaults of Echo</li>
+                <li>War-Machine Psalms</li>
+                <li>Unearthed Horizon</li>
+              </ol>
+            </div>
+          </article>
+          <article class="panel">
+            <div class="content">
+              <h3>Story / Lore</h3>
+              <p class="lead">In a world where memory is mined like ore, Echoes Unearthed follows a lone archivist crossing industrial ruins to recover lost voices buried beneath machine empires.</p>
+              <div class="audio-list">
+                <div>
+                  <strong>Iron Testament — Demo Fragment</strong>
+                  <audio controls preload="none"><source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_b6f9ed65ea.mp3?filename=trailer-soundtrack-66286.mp3" type="audio/mpeg" /></audio>
+                </div>
+                <div>
+                  <strong>Vaults of Echo — Atmosphere Layer</strong>
+                  <audio controls preload="none"><source src="https://cdn.pixabay.com/download/audio/2022/03/09/audio_2235f7d1a4.mp3?filename=darkness-60013.mp3" type="audio/mpeg" /></audio>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
 
-<button id="signupBtn">Create Account</button>
-<button id="loginBtn">Login</button>
+    <section id="gallery" class="fade-up">
+      <div class="container">
+        <h2>Visual Gallery</h2>
+        <p class="lead">Industrial relics, war-machine silhouettes, and cinematic renders supporting the Echoes Unearthed visual identity.</p>
+        <div class="grid">
+          <article class="panel gallery-item"><img src="https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=900&q=80" alt="Cinematic render concept" loading="lazy" /></article>
+          <article class="panel gallery-item"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=900&q=80" alt="Industrial machine aesthetic" loading="lazy" /></article>
+          <article class="panel gallery-item"><img src="https://images.unsplash.com/photo-1475274229878-4e87f4e0ef9f?auto=format&fit=crop&w=900&q=80" alt="Atmospheric dark visual" loading="lazy" /></article>
+          <article class="panel gallery-item"><img src="https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?auto=format&fit=crop&w=900&q=80" alt="War-machine themed artwork" loading="lazy" /></article>
+        </div>
+      </div>
+    </section>
 
-<script>
-  const SUPABASE_URL = "https://retoydsgsuvznlpsguts.supabase.co";
-  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJldG95ZHNnc3V2em5scHNndXRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5Mjg0MzEsImV4cCI6MjA4NjUwNDQzMX0.2Ptgo4ivW6rlJV4HaVNWV3bBMpwAEYVGRu6YDjE8tMk";
+    <section id="studio" class="fade-up">
+      <div class="container">
+        <h2>Kamdridi Studio</h2>
+        <p class="lead">Label-level creative production for artists, projects, and visual universes.</p>
+        <div class="studio-grid">
+          <article class="panel studio-card"><div class="content"><h3>AI Music Videos</h3><p class="meta">Rapid ideation to finished narrative clips with cinematic direction.</p><button class="btn checkout-btn" data-plan="starter">Book AI Video Sprint</button></div></article>
+          <article class="panel studio-card"><div class="content"><h3>Cinematic Visualizers</h3><p class="meta">Dark, atmospheric visualizers synchronized to arrangement and arc.</p><button class="btn checkout-btn" data-plan="growth">Book Visualizer Package</button></div></article>
+          <article class="panel studio-card"><div class="content"><h3>Visual Albums</h3><p class="meta">Long-form cohesive visual album systems from concept to delivery.</p><button class="btn checkout-btn" data-plan="elite">Book Visual Album Build</button></div></article>
+        </div>
+      </div>
+    </section>
 
-  // IMPORTANT: rename client to avoid conflict
-  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <section id="videos" class="fade-up">
+      <div class="container">
+        <h2>Video Portfolio</h2>
+        <p class="lead">Featured cinematic visual projects, world-building reels, and long-form audio-visual storytelling pieces.</p>
+        <div class="video-grid">
+          <article class="panel video-card"><iframe src="https://www.youtube.com/embed/LXb3EKWsInQ" title="Cinematic video project 1" loading="lazy" allowfullscreen></iframe><div class="content"><strong>Echoes Visual Sequence I</strong><p class="meta">Cinematic campaign preview.</p></div></article>
+          <article class="panel video-card"><iframe src="https://www.youtube.com/embed/9No-FiEInLA" title="Cinematic video project 2" loading="lazy" allowfullscreen></iframe><div class="content"><strong>Industrial Motion Preview</strong><p class="meta">Dark moodboard and direction reel.</p></div></article>
+          <article class="panel video-card"><iframe src="https://www.youtube.com/embed/ScMzIvxBSi4" title="Cinematic video project 3" loading="lazy" allowfullscreen></iframe><div class="content"><strong>Worldbuild Study</strong><p class="meta">Concept animation sample.</p></div></article>
+        </div>
+      </div>
+    </section>
 
-  document.getElementById("signupBtn").addEventListener("click", async () => {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    <section id="services" class="fade-up">
+      <div class="container">
+        <h2>Artist Services</h2>
+        <p class="lead">Commission high-end creative execution and conversion-focused systems built with the same intentionality as the music universe.</p>
+        <div class="pricing-grid">
+          <article class="panel price-card"><div class="content"><h3>Starter</h3><p class="price">$300</p><ul><li>1 strategy deep-dive call</li><li>Micro campaign blueprint</li><li>7-day async support</li></ul><button class="btn checkout-btn" data-plan="starter">Secure Starter</button></div></article>
+          <article class="panel price-card"><div class="content"><h3>Growth</h3><p class="price">$1500</p><ul><li>Funnel + offer implementation</li><li>Creative/copy alignment</li><li>30-day optimization</li></ul><button class="btn checkout-btn" data-plan="growth">Secure Growth</button></div></article>
+          <article class="panel price-card"><div class="content"><h3>Elite</h3><p class="price">$5000</p><ul><li>Full ecosystem architecture</li><li>Priority creative production</li><li>Direct strategic partnership</li></ul><button class="btn checkout-btn" data-plan="elite">Secure Elite</button></div></article>
+        </div>
+      </div>
+    </section>
 
-    if (!email || !password) {
-      alert("Please enter email and password.");
-      return;
-    }
+    <section id="store" class="fade-up">
+      <div class="container">
+        <h2>Store</h2>
+        <p class="lead">Limited-run merchandise and collector artifacts for the Echoes Unearthed universe.</p>
+        <div class="store-grid">
+          <article class="panel store-card"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=80" alt="Kamdridi black label tee" loading="lazy" /><div class="content"><h3>Emblem Tee</h3><p class="meta">Premium black/gold print, limited batch.</p><button class="btn secondary">Preview Drop</button></div></article>
+          <article class="panel store-card"><img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=900&q=80" alt="Collector edition box" loading="lazy" /><div class="content"><h3>Collector Edition</h3><p class="meta">Artbook + stems archive + numbered insert.</p><button class="btn secondary">View Artifact</button></div></article>
+          <article class="panel store-card"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80" alt="Industrial sigil print" loading="lazy" /><div class="content"><h3>Sigil Print Set</h3><p class="meta">Industrial war-machine visual print trilogy.</p><button class="btn secondary">See Collection</button></div></article>
+        </div>
+      </div>
+    </section>
+  </main>
 
-    const { error } = await sbClient.auth.signUp({
-      email: email,
-      password: password
-    });
+  <footer>
+    KAMDRIDI • Echoes Unearthed Universe • Secure Stripe Checkout
+  </footer>
 
-    if (error) {
-      alert(error.message);
-    } else {
-      alert("Check your email to confirm your account.");
-    }
-  });
-
-  document.getElementById("loginBtn").addEventListener("click", async () => {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    if (!email || !password) {
-      alert("Please enter email and password.");
-      return;
-    }
-
-    const { error } = await sbClient.auth.signInWithPassword({
-      email: email,
-      password: password
-    });
-
-    if (error) {
-      alert(error.message);
-    } else {
-      alert("Login successful.");
-    }
-  });
-</script>
-
+  <script src="./main.js"></script>
 </body>
 </html>

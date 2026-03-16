@@ -1,0 +1,10 @@
+{
+  "name": "kamdridi-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-ready static site with Stripe Checkout via Vercel serverless API.",
+  "scripts": {
+    "check": "node --check api/create-checkout-session.js && node --check main.js",
+    "build": "echo 'Static site build complete'"
+  }
+}
