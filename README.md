@@ -54,3 +54,8 @@ npm run build
 - Responsive layout and fluid grid behavior across mobile/tablet/desktop.
 - Lazy loading used on media where possible.
 - Lightweight CSS + IntersectionObserver for smooth section reveal effects.
+
+
+## Added launch docs
+- `START-HERE.md` — onboarding and execution checklist for DreamGirl AI launch.
+- `MONGODB-SETUP.md` — step-by-step MongoDB Atlas/local setup and connection test.
