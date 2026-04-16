@@ -111,11 +111,11 @@ export default function Home() {
         <section className="mt-7 panel p-6 md:p-9">
           <div className="grid gap-5 lg:grid-cols-[1fr_1.4fr]">
             <div>
-              <p className="tiny">WHO IS KAM DRIDI</p>
-              <h3 className="archive-title">A COMIC ARCHIVE INSIDE THE ECHOES UNEARTHED WORLD</h3>
+              <p className="tiny">WAR MACHINES</p>
+              <h3 className="archive-title">WAR MACHINES ARCHIVE INSIDE THE ECHOES UNEARTHED WORLD</h3>
               <p className="mt-4 text-2xl text-zinc-300 leading-relaxed">
-                Read through the responsive comic-style presentation and move through the artist mythology with a clean
-                page viewer.
+                Read through the War Machines visual archive and move through the artist mythology with a clean page
+                viewer.
               </p>
             </div>
             <div className="archive-art" />
