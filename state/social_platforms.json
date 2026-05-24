@@ -1,0 +1,46 @@
+[
+  {
+    "campaign_id": "war_machines_out_now",
+    "platform": "youtube",
+    "account_name": "KAM DRIDI Official",
+    "auth_status": "MISSING_TOKEN",
+    "publish_mode": "AUTO",
+    "publish_status": "NEEDS_AUTH",
+    "post_url": "",
+    "error_message": "YouTube OAuth credentials missing.",
+    "posted_at": ""
+  },
+  {
+    "campaign_id": "war_machines_out_now",
+    "platform": "instagram",
+    "account_name": "KAM DRIDI",
+    "auth_status": "MISSING_TOKEN",
+    "publish_mode": "MANUAL",
+    "publish_status": "MANUAL_REQUIRED",
+    "post_url": "",
+    "error_message": "Meta token and Instagram Business/Creator linkage required.",
+    "posted_at": ""
+  },
+  {
+    "campaign_id": "war_machines_out_now",
+    "platform": "facebook",
+    "account_name": "KAM DRIDI Page",
+    "auth_status": "MISSING_TOKEN",
+    "publish_mode": "MANUAL",
+    "publish_status": "MANUAL_REQUIRED",
+    "post_url": "",
+    "error_message": "Meta Page token and permissions required.",
+    "posted_at": ""
+  },
+  {
+    "campaign_id": "war_machines_out_now",
+    "platform": "tiktok",
+    "account_name": "KAM DRIDI",
+    "auth_status": "API_LIMITED",
+    "publish_mode": "DRAFT_ONLY",
+    "publish_status": "MANUAL_REQUIRED",
+    "post_url": "",
+    "error_message": "TikTok Content Posting API may require audit/review for public posting.",
+    "posted_at": ""
+  }
+]
