@@ -4,7 +4,7 @@
   "private": true,
   "description": "Production-ready static site with Stripe Checkout via Vercel serverless API.",
   "scripts": {
-    "check": "node --check api/create-checkout-session.js && node --check api/social/campaigns.js && node --check api/social/publish.js && node --check api/social/state.js && node --check api/social/validation.js && node --check main.js && node --check social-dashboard.js",
+    "check": "node --check api/create-checkout-session.js && node --check api/social/adapters.js && node --check api/social/campaigns.js && node --check api/social/publish.js && node --check api/social/state.js && node --check api/social/validation.js && node --check main.js && node --check social-dashboard.js",
     "build": "echo 'Static site build complete'"
   }
 }

@@ -8,7 +8,8 @@
     "publish_status": "NEEDS_AUTH",
     "post_url": "",
     "error_message": "YouTube OAuth credentials missing.",
-    "posted_at": ""
+    "posted_at": "",
+    "truth_label": "NEEDS_TOKEN"
   },
   {
     "campaign_id": "war_machines_out_now",
@@ -19,7 +20,8 @@
     "publish_status": "MANUAL_REQUIRED",
     "post_url": "",
     "error_message": "Meta token and Instagram Business/Creator linkage required.",
-    "posted_at": ""
+    "posted_at": "",
+    "truth_label": "MANUAL_REQUIRED"
   },
   {
     "campaign_id": "war_machines_out_now",
@@ -30,7 +32,8 @@
     "publish_status": "MANUAL_REQUIRED",
     "post_url": "",
     "error_message": "Meta Page token and permissions required.",
-    "posted_at": ""
+    "posted_at": "",
+    "truth_label": "MANUAL_REQUIRED"
   },
   {
     "campaign_id": "war_machines_out_now",
@@ -41,6 +44,7 @@
     "publish_status": "MANUAL_REQUIRED",
     "post_url": "",
     "error_message": "TikTok Content Posting API may require audit/review for public posting.",
-    "posted_at": ""
+    "posted_at": "",
+    "truth_label": "MANUAL_REQUIRED"
   }
 ]

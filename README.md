@@ -92,3 +92,11 @@ A real-state social publishing control plane is included with **no fake posting*
 - Credentials are read only from environment variables.
 - Tokens are never exposed in frontend payloads.
 - Do not commit secrets in repo state files.
+
+### Additional adapter env controls
+- `YOUTUBE_APP_VERIFIED=true` enables READY state for YouTube AUTO mode.
+- `META_IG_ACCOUNT_ID` and `META_PAGE_ID` are required with `META_ACCESS_TOKEN`.
+- `META_APP_REVIEW_APPROVED=true` enables READY state for Meta AUTO mode.
+- `TIKTOK_AUDIT_APPROVED=true` enables READY state for TikTok AUTO mode.
+
+Without these controls, the system intentionally keeps platforms in `NEEDS_REVIEW`, `NEEDS_AUTH`, `DRAFT_ONLY`, or `MANUAL_REQUIRED`.
