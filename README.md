@@ -54,3 +54,49 @@ npm run build
 - Responsive layout and fluid grid behavior across mobile/tablet/desktop.
 - Lazy loading used on media where possible.
 - Lightweight CSS + IntersectionObserver for smooth section reveal effects.
+
+## Echoes Engine Social Publisher
+
+A real-state social publishing control plane is included with **no fake posting**. Dashboard: `/social-dashboard.html`.
+
+### What works now (REAL)
+- Campaign + platform state persisted in:
+  - `state/social_campaigns.json`
+  - `state/social_platforms.json`
+  - `state/social_posts.json`
+  - `state/social_errors.json`
+- Manual mode workflow per platform:
+  - Copy caption / hashtags
+  - Open official upload URLs
+  - Mark post as posted and save final URL
+- File and metadata validation checks for campaign assets and content.
+
+### Needs OAuth / tokens (NEEDS_TOKEN or NEEDS_AUTH)
+- YouTube auto upload requires:
+  - `YOUTUBE_CLIENT_ID`
+  - `YOUTUBE_CLIENT_SECRET`
+  - `YOUTUBE_REFRESH_TOKEN`
+- Meta publishing requires:
+  - `META_ACCESS_TOKEN`
+  - Connected IG Business/Creator + Facebook Page + required scopes
+- TikTok posting requires:
+  - `TIKTOK_ACCESS_TOKEN`
+  - App eligibility/audit depending on posting target
+
+### Needs app review or audit (NEEDS_REVIEW / MANUAL_REQUIRED)
+- YouTube projects not verified for public upload should remain manual/review-gated.
+- TikTok Content Posting API may be limited to draft/manual in unaudited apps.
+- Meta permissions may require App Review before publish actions are allowed.
+
+### Security
+- Credentials are read only from environment variables.
+- Tokens are never exposed in frontend payloads.
+- Do not commit secrets in repo state files.
+
+### Additional adapter env controls
+- `YOUTUBE_APP_VERIFIED=true` enables READY state for YouTube AUTO mode.
+- `META_IG_ACCOUNT_ID` and `META_PAGE_ID` are required with `META_ACCESS_TOKEN`.
+- `META_APP_REVIEW_APPROVED=true` enables READY state for Meta AUTO mode.
+- `TIKTOK_AUDIT_APPROVED=true` enables READY state for TikTok AUTO mode.
+
+Without these controls, the system intentionally keeps platforms in `NEEDS_REVIEW`, `NEEDS_AUTH`, `DRAFT_ONLY`, or `MANUAL_REQUIRED`.
